@@ -9,7 +9,13 @@ defmodule WeightTest do
     test "return value with numeric argument" do
       weight = Weight.create_weight(12)
 
-      assert weight == {:kg, 12}
+      assert weight == %Weight{unit: :kg, value: 12}
+    end
+
+    test "raise argument error when value < 0" do
+      assert_raise ArgumentError, fn ->
+        Weight.create_weight(-12)
+      end
     end
 
     test "raise error with any other argument" do
@@ -23,7 +29,7 @@ defmodule WeightTest do
     test "return appropriate value with :kg or :lbs and a number" do
       weight = Weight.create_weight(12, :kg)
 
-      assert weight == {:kg, 12}
+      assert weight == %Weight{unit: :kg, value: 12}
     end
 
     test "raise error with other type of arguments" do
@@ -42,14 +48,14 @@ defmodule WeightTest do
       weight = Weight.create_weight(100, :kg)
       converted_weight = Weight.convert_weight(weight, :lbs)
 
-      assert converted_weight == {:lbs, 220.462}
+      assert converted_weight == %Weight{unit: :lbs, value: 220.462}
     end
 
     test "convert from lbs to kg" do
       weight = Weight.create_weight(100, :lbs)
       converted_weight = Weight.convert_weight(weight, :kg)
 
-      assert converted_weight == {:kg, 45.35929094356398}
+      assert converted_weight == %Weight{unit: :kg, value: 45.35929094356398}
     end
 
     test "raise error when arguments are wrong" do
