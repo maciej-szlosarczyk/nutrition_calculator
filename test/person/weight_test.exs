@@ -32,6 +32,12 @@ defmodule WeightTest do
       assert weight == %Weight{unit: :kg, value: 12}
     end
 
+    test "raise argument error when value < 0" do
+      assert_raise ArgumentError, fn ->
+        Weight.create_weight(-12, :kg)
+      end
+    end
+
     test "raise error with other type of arguments" do
       assert_raise ArgumentError, fn ->
         Weight.create_weight(12, :atom)

@@ -1,6 +1,6 @@
 defmodule NutritionCalculator.Weight do
   @moduledoc """
-  Functions and types to perform weight-related operations
+  Functions to perform weight-related operations
   """
 
   alias NutritionCalculator.Weight
@@ -29,7 +29,7 @@ defmodule NutritionCalculator.Weight do
 
   @spec create_weight(number(), :kg | :lbs) :: Weight.t
   def create_weight(value, unit)
-  when (unit == :kg or unit == :lbs) and is_number(value) do
+  when (unit == :kg or unit == :lbs) and is_number(value) and value >= 0 do
     %Weight{unit: unit, value: value}
   end
 
