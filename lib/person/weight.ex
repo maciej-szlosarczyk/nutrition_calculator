@@ -1,14 +1,14 @@
-defmodule NutritionCalculator.Weight do
+defmodule Person.Weight do
   @moduledoc """
   Functions to perform weight-related operations
   """
 
-  alias NutritionCalculator.Weight
+  alias Person.Weight
 
   @lbs 2.20462
 
   defstruct unit: nil, value: nil
-  @type t :: %NutritionCalculator.Weight{
+  @type t :: %Person.Weight{
     unit: :lbs | :kg, value: number()
   }
 

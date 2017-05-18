@@ -1,9 +1,9 @@
-defmodule WeightTest do
+defmodule PersonWeightTest do
   use ExUnit.Case, async: true
 
-  alias NutritionCalculator.Weight
+  alias Person.Weight
 
-  doctest NutritionCalculator.Weight
+  doctest Person.Weight
 
   describe "create_weight/1" do
     test "return value with numeric argument" do
