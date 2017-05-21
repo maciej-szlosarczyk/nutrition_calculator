@@ -38,7 +38,7 @@ defmodule Person.Weight do
   end
 
   @spec convert_weight(Weight.t, :kg) :: Weight.t
-  def convert_weight(weight, :kg) do
+  def convert_weight(weight = %Weight{}, :kg) do
     case weight.unit do
       :kg ->
         weight
@@ -50,7 +50,7 @@ defmodule Person.Weight do
   end
 
   @spec convert_weight(Weight.t, :lbs) :: Weight.t
-  def convert_weight(weight, :lbs) do
+  def convert_weight(weight = %Weight{}, :lbs) do
     case weight.unit do
       :lbs ->
         weight
