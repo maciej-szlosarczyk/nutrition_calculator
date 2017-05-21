@@ -1,4 +1,9 @@
 defmodule NutritionCalculator.Person do
+  alias Person.Weight
+  alias Person.Height
+
+  alias NutritionCalculator.Person
+
   @moduledoc """
   A person construct with related validations. At this moment it does not
   support any type of weight or height conversions, everything is assumend to be
@@ -6,18 +11,39 @@ defmodule NutritionCalculator.Person do
   """
 
   @type gender :: :male | :female
-  @type weight :: {:kg, number()} | {:lbs, number()}
-  @type height :: {:cm, number()} | {:ft, integer(), :in, integer()}
   @type age :: integer()
+  @type system :: :imperial | :metric
+
+  @type map_person :: %{weight: number(), height: number(), system: system,
+                        age: number(), gender: gender}
 
   defstruct gender: nil, weight: nil, height: nil, age: nil
   @type t :: %NutritionCalculator.Person{
-    gender: gender, weight: weight, height: height
+    gender: gender, weight: Weight.t, height: Height.t
   }
 
+  @spec create_person(map_person) :: Person.t
+  def create_person(person = %{}) do
+    {weight, height} =
+      case person.system do
+        :imperial ->
+          {Weight.create_weight(person.weight, :lbs),
+           Height.create_height(person.height, :imperial)}
+        :metric ->
+          {Weight.create_weight(person.weight, :kg),
+           Height.create_height(person.height, :metric)}
+      end
+
+    %Person{weight: weight, height: height, age: person.age,
+            gender: person.gender}
+  end
+
   @spec validate_person(%NutritionCalculator.Person{}) :: boolean
-  def validate_person(person) do
-    validate_gender(person) && validate_age(person) && validate_weight(person)
+  def validate_person(person = %Person{}) do
+    validate_gender(person)
+    && validate_age(person)
+    && validate_weight(person)
+    && validate_height(person)
   end
 
   @spec validate_gender(%NutritionCalculator.Person{}) :: boolean
@@ -32,18 +58,12 @@ defmodule NutritionCalculator.Person do
   end
 
   @spec validate_weight(%NutritionCalculator.Person{}) :: boolean
-  def validate_weight(person) do
-    is_positive_number?(person.weight)
+  def validate_weight(person = %Person{}) do
+    person.weight != nil
   end
 
-  @spec is_positive_number?(any()) :: boolean
-  defp is_positive_number?(number) do
-    case number do
-      x when is_number(x) and x >= 0 ->
-        true
-      _ ->
-        false
-    end
+  def validate_height(person = %Person{}) do
+    person.height != nil
   end
 
   @spec is_positive_integer?(any()) :: boolean

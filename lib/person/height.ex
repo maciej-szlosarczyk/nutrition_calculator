@@ -66,7 +66,7 @@ defmodule Person.Height do
     end
   end
 
-  @spec decorate(Height) :: metric | imperial
+  @spec decorate(Height.t) :: metric | imperial
   def decorate(height = %Height{}) do
     case height.unit do
       :imperial ->

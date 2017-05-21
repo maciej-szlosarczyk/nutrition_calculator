@@ -1,9 +1,32 @@
 defmodule PersonTest do
   use ExUnit.Case, async: true
 
+  alias Person.Weight
+  alias Person.Height
+
+  # NB! This needs to be after the aliases above
   alias NutritionCalculator.Person
 
   doctest NutritionCalculator.Person
+
+  describe "create_person/1" do
+    test "it creates a person" do
+      map = %{weight: 80, height: 181, gender: :male, system: :metric, age: 28}
+
+      person = %NutritionCalculator.Person{
+        weight: %Weight{unit: :kg, value: 80},
+        height: %Height{unit: :metric, value: 181},
+        gender: :male, age: 28}
+
+      assert Person.create_person(map) == person
+    end
+
+    test "it raises KeyError when map is incorrect" do
+      assert_raise KeyError, fn ->
+        Person.create_person(%{person: :person})
+      end
+    end
+  end
 
   test "assert gender inclusion" do
     john = %Person{gender: :male}
@@ -37,24 +60,9 @@ defmodule PersonTest do
     assert Person.validate_age(mary) == true
   end
 
-  test "assert numeric weight" do
-    john = %Person{weight: "Big scary tree"}
-    mary = %Person{weight: 12}
-
-    assert Person.validate_weight(john) == false
-    assert Person.validate_weight(mary) == true
-  end
-
-  test "assert positive weight" do
-    john = %Person{weight: -11}
-    mary = %Person{weight: 12.12}
-
-    assert Person.validate_weight(john) == false
-    assert Person.validate_weight(mary) == true
-  end
-
   test "assert general validation" do
-    john = %Person{weight: 12, height: 12, age: 12, gender: :male}
+    map = %{weight: 12, height: 12, age: 12, gender: :male, system: :metric}
+    john = Person.create_person(map)
     mary = %Person{weight: 0.112, height: 1.112, age: -12, gender: :robot}
 
     assert Person.validate_person(john) == true
