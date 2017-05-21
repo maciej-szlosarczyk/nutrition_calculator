@@ -44,4 +44,42 @@ defmodule HeightTest do
       end
     end
   end
+
+  describe "convert_height/2" do
+    test "returns imperial values with :imperial" do
+      height = Height.create_height(181, :metric)
+      converted_height = %Height{unit: :imperial, value: 71}
+
+      assert Height.convert_height(height, :imperial) == converted_height
+    end
+
+    test "returns the same value if the value is already :imperial" do
+      height = Height.create_height(71, :imperial)
+
+      assert Height.convert_height(height, :imperial) == height
+    end
+
+    test "returns metric values with :metric" do
+      height = Height.create_height(71, :imperial)
+      converted_height = Height.create_height(180, :metric)
+
+      assert Height.convert_height(height, :metric) == converted_height
+    end
+  end
+
+  describe "decorate/1" do
+    test "it decorates metric values" do
+      height = Height.create_height(181, :metric)
+      decorated_height = %{unit: :metric, meters: 1, centimeters: 81}
+
+      assert Height.decorate(height) == decorated_height
+    end
+
+    test "it decorates imperial values" do
+      height = Height.create_height(72, :imperial)
+      decorated_height = %{unit: :imperial, feet: 6, inches: 0}
+
+      assert Height.decorate(height) == decorated_height
+    end
+  end
 end

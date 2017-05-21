@@ -39,12 +39,26 @@ defmodule Person.Weight do
 
   @spec convert_weight(Weight.t, :kg) :: Weight.t
   def convert_weight(weight, :kg) do
-    %Weight{unit: :kg, value: (weight.value / @lbs)}
+    case weight.unit do
+      :kg ->
+        weight
+      :lbs ->
+        weight.value
+        |> (fn(x) -> x / @lbs end).()
+        |> create_weight(:kg)
+    end
   end
 
   @spec convert_weight(Weight.t, :lbs) :: Weight.t
   def convert_weight(weight, :lbs) do
-    %Weight{unit: :lbs, value: (weight.value * @lbs)}
+    case weight.unit do
+      :lbs ->
+        weight
+      :kg ->
+        weight.value
+        |> (fn(x) -> x * @lbs end).()
+        |> create_weight(:lbs)
+    end
   end
 
   @doc """

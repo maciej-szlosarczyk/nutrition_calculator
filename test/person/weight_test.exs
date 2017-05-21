@@ -57,11 +57,23 @@ defmodule PersonWeightTest do
       assert converted_weight == %Weight{unit: :lbs, value: 220.462}
     end
 
+    test "returns the same weight in :kg if no conversion needed" do
+      weight = Weight.create_weight(100, :kg)
+
+      assert Weight.convert_weight(weight, :kg) == weight
+    end
+
     test "convert from lbs to kg" do
       weight = Weight.create_weight(100, :lbs)
       converted_weight = Weight.convert_weight(weight, :kg)
 
       assert converted_weight == %Weight{unit: :kg, value: 45.35929094356398}
+    end
+
+    test "returns the same weight in :lbs if no conversion needed" do
+      weight = Weight.create_weight(220, :lbs)
+
+      assert Weight.convert_weight(weight, :lbs) == weight
     end
 
     test "raise error when arguments are wrong" do
