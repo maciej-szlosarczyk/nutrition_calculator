@@ -62,8 +62,17 @@ defmodule NutritionCalculator.Person do
     person.weight != nil
   end
 
+  def validate_weight(_person) do
+    false
+  end
+
+  @spec validate_height(%NutritionCalculator.Person{}) :: boolean
   def validate_height(person = %Person{}) do
     person.height != nil
+  end
+
+  def validate_height(_person) do
+    false
   end
 
   @spec is_positive_integer?(any()) :: boolean

@@ -28,44 +28,50 @@ defmodule PersonTest do
     end
   end
 
-  test "assert gender inclusion" do
-    john = %Person{gender: :male}
-    mary = %Person{gender: :giant_robot}
+  describe "validate_gender/1" do
+    test "assert gender inclusion" do
+      john = %Person{gender: :male}
+      mary = %Person{gender: :giant_robot}
 
-    assert Person.validate_gender(john) == true
-    assert Person.validate_gender(mary) == false
+      assert Person.validate_gender(john) == true
+      assert Person.validate_gender(mary) == false
+    end
   end
 
-  test "assert numeric age" do
-    john = %Person{age: "Big scary tree"}
-    mary = %Person{age: 12}
+  describe "validate_age/1" do
+    test "assert numeric age" do
+      john = %Person{age: "Big scary tree"}
+      mary = %Person{age: 12}
 
-    assert Person.validate_age(john) == false
-    assert Person.validate_age(mary) == true
+      assert Person.validate_age(john) == false
+      assert Person.validate_age(mary) == true
+    end
+
+    test "assert positive numeric age" do
+      john = %Person{age: -18}
+      mary = %Person{age: 12}
+
+      assert Person.validate_age(john) == false
+      assert Person.validate_age(mary) == true
+    end
+
+    test "assert integer age" do
+      john = %Person{age: 18.02}
+      mary = %Person{age: 12}
+
+      assert Person.validate_age(john) == false
+      assert Person.validate_age(mary) == true
+    end
   end
 
-  test "assert positive numeric age" do
-    john = %Person{age: -18}
-    mary = %Person{age: 12}
+  describe "validate_person" do
+    test "assert general validation" do
+      map = %{weight: 12, height: 12, age: 12, gender: :male, system: :metric}
+      john = Person.create_person(map)
+      mary = %Person{weight: 0.112, height: 1.112, age: -12, gender: :robot}
 
-    assert Person.validate_age(john) == false
-    assert Person.validate_age(mary) == true
-  end
-
-  test "assert integer age" do
-    john = %Person{age: 18.02}
-    mary = %Person{age: 12}
-
-    assert Person.validate_age(john) == false
-    assert Person.validate_age(mary) == true
-  end
-
-  test "assert general validation" do
-    map = %{weight: 12, height: 12, age: 12, gender: :male, system: :metric}
-    john = Person.create_person(map)
-    mary = %Person{weight: 0.112, height: 1.112, age: -12, gender: :robot}
-
-    assert Person.validate_person(john) == true
-    assert Person.validate_person(mary) == false
+      assert Person.validate_person(john) == true
+      assert Person.validate_person(mary) == false
+    end
   end
 end
