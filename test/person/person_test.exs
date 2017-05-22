@@ -16,7 +16,7 @@ defmodule PersonTest do
       person = %NutritionCalculator.Person{
         weight: %Weight{unit: :kg, value: 80},
         height: %Height{unit: :metric, value: 181},
-        gender: :male, age: 28}
+        gender: :male, age: 28, system: :metric}
 
       assert Person.create_person(map) == person
     end
@@ -61,6 +61,25 @@ defmodule PersonTest do
 
       assert Person.validate_age(john) == false
       assert Person.validate_age(mary) == true
+    end
+  end
+
+  describe "validate_system/1" do
+    test "it returns true for metric" do
+      mary = %Person{system: :metric}
+
+      assert Person.validate_system(mary) == true
+    end
+
+    test "it returns true for imperial" do
+      john = %Person{system: :imperial}
+      assert Person.validate_system(john) == true
+    end
+
+    test "it returns true on undefined system" do
+      cosmo = %Person{system: :cosmic}
+
+      assert Person.validate_system(cosmo) == false
     end
   end
 

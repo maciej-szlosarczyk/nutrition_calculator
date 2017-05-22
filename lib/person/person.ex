@@ -17,9 +17,9 @@ defmodule NutritionCalculator.Person do
   @type map_person :: %{weight: number(), height: number(), system: system,
                         age: number(), gender: gender}
 
-  defstruct gender: nil, weight: nil, height: nil, age: nil
+  defstruct gender: nil, weight: nil, height: nil, age: nil, system: nil
   @type t :: %NutritionCalculator.Person{
-    gender: gender, weight: Weight.t, height: Height.t
+    gender: gender, weight: Weight.t, height: Height.t, system: system()
   }
 
   @spec create_person(map_person) :: Person.t
@@ -35,7 +35,7 @@ defmodule NutritionCalculator.Person do
       end
 
     %Person{weight: weight, height: height, age: person.age,
-            gender: person.gender}
+            gender: person.gender, system: person.system}
   end
 
   @spec validate_person(%NutritionCalculator.Person{}) :: boolean
@@ -44,6 +44,7 @@ defmodule NutritionCalculator.Person do
     && validate_age(person)
     && validate_weight(person)
     && validate_height(person)
+    && validate_system(person)
   end
 
   @spec validate_gender(%NutritionCalculator.Person{}) :: boolean
@@ -64,6 +65,18 @@ defmodule NutritionCalculator.Person do
 
   def validate_weight(_person) do
     false
+  end
+
+  @spec validate_system(%NutritionCalculator.Person{}) :: boolean
+  def validate_system(person = %Person{}) do
+    case person.system do
+      :metric ->
+        true
+      :imperial ->
+        true
+      _ ->
+        false
+    end
   end
 
   @spec validate_height(%NutritionCalculator.Person{}) :: boolean
