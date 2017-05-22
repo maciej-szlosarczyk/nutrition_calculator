@@ -1,6 +1,9 @@
 # NutritionCalculator
 
-**TODO: Add description**
+A simple module to perform calculations of various nutrition-related data for a
+specific person.
+
+It was created so I can explore the features of Elixir type system and dialyzer.
 
 ## Installation
 
